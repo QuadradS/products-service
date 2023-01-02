@@ -21,13 +21,13 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@nestjs/common": "^9.0.0",
+    "@nestjs/common": "^9.2.1",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
-    "@typegoose/typegoose": "^9.13.2",
-    "@types/mongoose": "^5.11.97",
-    "mongoose": "^6.7.5",
+    "@typegoose/typegoose": "^10.0.0",
+    "mongodb": "^4.13.0",
+    "mongoose": "^6.8.2",
     "nestjs-typegoose": "^7.1.38",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",

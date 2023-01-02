@@ -1,7 +1,7 @@
-import { ConfigService } from '@nestjs/config';
-import { TypegooseModuleOptions } from 'nestjs-typegoose';
+import {ConfigService} from '@nestjs/config';
+import {TypegooseModuleOptions} from 'nestjs-typegoose';
 
-const getMongoOptions = () => ({})
+const getMongoOptions = () => ({});
 const getMongoConnectURI = (configService: ConfigService) => {
 	const path = 'mongodb://' +
 		configService.get('MONGO_LOGIN') + ':' +
@@ -11,13 +11,12 @@ const getMongoConnectURI = (configService: ConfigService) => {
 		configService.get('MONGO_AUTH_DB');
 
 
-
-	return 'mongodb://localhost:27017/mongodb'
-}
+	return 'mongodb://localhost:27017/nest-pet';
+};
 
 export const getMongoConfig = async (configService: ConfigService): Promise<TypegooseModuleOptions> => {
 	return {
 		uri: getMongoConnectURI(configService),
 		...getMongoOptions()
-	}
-}
+	};
+};

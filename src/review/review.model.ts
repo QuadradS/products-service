@@ -1,7 +1,10 @@
-import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
-import { Prop } from '@typegoose/typegoose';
-import { Types } from 'mongoose';
-export interface ReviewModel extends Base {  }
+import {Base, TimeStamps} from '@typegoose/typegoose/lib/defaultClasses';
+import {Prop} from '@typegoose/typegoose';
+import {Types} from 'mongoose';
+
+export interface ReviewModel extends Base {
+}
+
 export class ReviewModel extends TimeStamps {
 	@Prop()
 	name: string;
@@ -15,6 +18,6 @@ export class ReviewModel extends TimeStamps {
 	@Prop()
 	rating: string;
 
-	@Prop({ type: Types.ObjectId })
-	productId: Types.ObjectId
+	@Prop({type: Types.ObjectId, required: false})
+	productId: Types.ObjectId;
 }
