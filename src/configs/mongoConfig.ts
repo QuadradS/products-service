@@ -4,14 +4,11 @@ import {TypegooseModuleOptions} from 'nestjs-typegoose';
 const getMongoOptions = () => ({});
 const getMongoConnectURI = (configService: ConfigService) => {
 	const path = 'mongodb://' +
-		configService.get('MONGO_LOGIN') + ':' +
-		configService.get('MONGO_PASSWORD') + '@' +
 		configService.get('MONGO_HOST') + ':' +
 		configService.get('MONGO_PORT') + '/' +
 		configService.get('MONGO_AUTH_DB');
 
-
-	return 'mongodb://localhost:27017/nest-pet';
+	return path;
 };
 
 export const getMongoConfig = async (configService: ConfigService): Promise<TypegooseModuleOptions> => {
