@@ -4,6 +4,8 @@ import {ProductModel} from './product.model';
 import {DocumentType, ModelType} from '@typegoose/typegoose/lib/types';
 import {DeleteResult, ObjectId} from 'mongodb';
 import {Types} from 'mongoose';
+import {FindProductsByCategoriesDto} from './dto/find-dto';
+import {ReviewModel} from '../review/review.model';
 
 @Injectable()
 export class ProductService {
@@ -24,5 +26,41 @@ export class ProductService {
 
 	getAll() {
 		return this.productModel.find({}).exec();
+	}
+
+	findProductsAndByCategories(dto: FindProductsByCategoriesDto): Promise<ProductModel[]> {
+		return this.productModel.aggregate([
+			{
+				$match: {
+					categories: dto.categories
+				},
+
+			},
+			{
+				$limit: dto.limit,
+			},
+			{
+				$lookup: {
+					from: 'Review',
+					localField: '_id',
+					foreignField: 'productId',
+					as: 'reviews'
+				}
+			},
+			{
+				$addFields: {
+					reviewsCount: {
+						$size: '$reviews',
+					},
+					reviewAvg: {
+						$avg: '$reviews.rating'
+					}
+				}
+			}
+		]).exec() as Promise<(ProductModel & {
+			reviews: ReviewModel[],
+			reviewsCount: number,
+			reviewAvg: null | number
+		})[]>;
 	}
 }

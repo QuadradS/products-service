@@ -1,7 +1,21 @@
-import {Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Patch, Post} from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	HttpCode,
+	HttpException,
+	HttpStatus,
+	Param,
+	Patch,
+	Post,
+	UseGuards, UsePipes, ValidationPipe
+} from '@nestjs/common';
 import {ProductModel} from './product.model';
-import {FindDto} from './dto/find-dto';
+import {FindDto, FindProductsByCategoriesDto} from './dto/find-dto';
 import {ProductService} from './product.service';
+import JwtAuthGuard from '../user/guards/jwt.guard';
+import {IdValidationPipe} from '../pipes/id-validation.pipe';
 
 @Controller('product')
 export class ProductController {
@@ -15,7 +29,7 @@ export class ProductController {
 	}
 
 	@Get(':id')
-	async get(@Param('id') id: string) {
+	async get(@Param('id', IdValidationPipe) id: string) {
 		const res = await this.productService.findById(id);
 		if (!res) {
 			throw new HttpException(`Not found by id ${id}`, HttpStatus.NOT_FOUND);
@@ -29,18 +43,20 @@ export class ProductController {
 	}
 
 	@Delete(':id')
-	async delete(@Param('id') id: string) {
+	@UseGuards(JwtAuthGuard)
+	async delete(@Param('id', IdValidationPipe) id: string) {
 		return this.productService.deleteOne(id);
 	}
 
 	@Patch(':id')
-	async patch(@Param() id: string, @Body() dto: ProductModel) {
+	async patch(@Param('id', IdValidationPipe) id: string, @Body() dto: ProductModel) {
 
 	}
 
-	@Post()
+	@Post('by-categories')
 	@HttpCode(200)
-	async find(@Body() dto: FindDto) {
-
+	@UsePipes(new ValidationPipe())
+	async findProductsAndByCategories(@Body() dto: FindProductsByCategoriesDto) {
+		return this.productService.findProductsAndByCategories(dto);
 	}
 }
